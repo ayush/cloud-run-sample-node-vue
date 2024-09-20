@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Application</title>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+
+  const options = {
+    moduleCache: {
+      vue: Vue,
+    },
+
+    getFile(url) {
+      return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
+    },
+
+    addStyle(styleStr) {
+      const style = document.createElement('style');
+      style.textContent = styleStr;
+      const ref = document.head.getElementsByTagName('style')[0] || null;
+      document.head.insertBefore(style, ref);
+    },
+
+    log(type, ...args) {
+      console.log(type, ...args);
+    }
+  }
+  const {loadModule, version} = window["vue3-sfc-loader"];
+  const app = Vue.createApp({
+    components: {
+      'app-main': Vue.defineAsyncComponent(() => loadModule('./AppMain.vue', options))
+    },
+    template: `
+      <app-main></app-main>`
+  });
+
+  app.mount('#app');
+</script>
+</body>
+</html>
